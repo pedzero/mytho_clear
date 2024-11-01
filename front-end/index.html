@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@^2.0/dist/tailwind.min.css" rel="stylesheet">
+    <title>MythoClear</title>
+</head>
+
+<body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">MythoClear</h1>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="container mx-auto mt-8 p-4 flex-grow">
+        <!-- Image Upload Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 text-center">
+            <h2 class="text-xl font-semibold mb-4">Upload an Image</h2>
+            <input type="file" id="imageInput" class="hidden" accept="image/*">
+            <div id="dropArea" class="block w-full p-4 border-dashed border-2 border-gray-300 rounded-md cursor-pointer text-gray-500 hover:bg-gray-50">
+                Drag & Drop an Image or Click to Upload
+            </div>
+            
+        </div>
+
+        <!-- Image Editing Section -->
+        <div class="mt-8 flex gap-4">
+            <!-- Image Preview and Actions -->
+            <div class="flex-1 bg-white rounded-lg shadow-md p-4 text-center">
+                <h3 class="text-lg font-semibold mb-2">Image Preview</h3>
+                <canvas id="imageCanvas" class="border border-gray-200 rounded overflow-hidden w-full h-auto" style="display:none;"></canvas>
+                <img id="uploadedImage" class="w-full h-auto" src="" alt="Uploaded Preview" style="display:none;">
+                <div class="mt-4 flex justify-center gap-4">
+                    <button id="removeButton" class="bg-red-500 text-white px-4 py-2 rounded">Remove</button>
+                    <button id="keepButton" class="bg-green-500 text-white px-4 py-2 rounded">Keep</button>
+                </div>
+            </div>
+
+            <!-- Sliders for Sensitivity and Smoothness -->
+            <div class="w-1/4 bg-white rounded-lg shadow-md p-4">
+                <h3 class="text-lg font-semibold mb-4">Adjustments</h3>
+                <label for="sensitivity" class="block text-gray-600 mb-2">Sensitivity</label>
+                <input type="range" id="sensitivity" min="0" max="100" class="w-full mb-4">
+                <label for="smoothness" class="block text-gray-600 mb-2">Smoothness</label>
+                <input type="range" id="smoothness" min="0" max="100" class="w-full">
+            </div>
+        </div>
+
+        <!-- Result Section -->
+        <div class="mt-8 bg-white rounded-lg shadow-md p-6 text-center">
+            <h2 class="text-xl font-semibold mb-4">Processed Image</h2>
+            <div id="resultContainer" class="border border-gray-200 rounded overflow-hidden mb-4">
+                <img id="resultImage" class="w-full h-auto" src="" alt="Result Preview">
+            </div>
+            <button id="downloadButton" class="bg-blue-500 text-white px-4 py-2 rounded">Download Image</button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white p-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 MythoClear. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+
+</html>
+
