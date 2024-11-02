@@ -1,0 +1,40 @@
+.loader {
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top: 4px solid #ffffff; /* Cor da borda superior */
+    border-radius: 50%;
+    width: 2rem; /* Tamanho do loader */
+    height: 2rem;
+    animation: spin 1s linear infinite; /* Animação de rotação */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#imageCanvas,
+#uploadedImage,
+#resultImage {
+    max-width: 100%;
+    max-height: 500px;
+    width: auto;
+    height: auto;
+    margin: auto;
+    display: block;
+}
+
+.toggle-bg {
+    transition: background-color 0.3s ease-in-out;
+}
+
+.toggle-bg.active {
+    background-color: #3b82f6; /* Cor azul quando ativo */
+}
+
+.dot {
+    transition: transform 0.3s ease-in-out;
+}
+
+.dot.active {
+    transform: translateX(100%); /* Mova para a direita quando ativo */
+}

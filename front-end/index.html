@@ -5,7 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@^2.0/dist/tailwind.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
     <title>MythoClear</title>
+    <style>
+
+    </style>
 </head>
 
 <body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
@@ -23,10 +27,10 @@
         <div class="bg-white rounded-lg shadow-md p-6 text-center">
             <h2 class="text-xl font-semibold mb-4">Upload an Image</h2>
             <input type="file" id="imageInput" class="hidden" accept="image/*">
-            <div id="dropArea" class="block w-full p-4 border-dashed border-2 border-gray-300 rounded-md cursor-pointer text-gray-500 hover:bg-gray-50">
+            <div id="dropArea"
+                class="block w-full p-4 border-dashed border-2 border-gray-300 rounded-md cursor-pointer text-gray-500 hover:bg-gray-50">
                 Drag & Drop an Image or Click to Upload
             </div>
-            
         </div>
 
         <!-- Image Editing Section -->
@@ -34,21 +38,27 @@
             <!-- Image Preview and Actions -->
             <div class="flex-1 bg-white rounded-lg shadow-md p-4 text-center">
                 <h3 class="text-lg font-semibold mb-2">Image Preview</h3>
-                <canvas id="imageCanvas" class="border border-gray-200 rounded overflow-hidden w-full h-auto" style="display:none;"></canvas>
-                <img id="uploadedImage" class="w-full h-auto" src="" alt="Uploaded Preview" style="display:none;">
-                <div class="mt-4 flex justify-center gap-4">
-                    <button id="removeButton" class="bg-red-500 text-white px-4 py-2 rounded">Remove</button>
-                    <button id="keepButton" class="bg-green-500 text-white px-4 py-2 rounded">Keep</button>
-                </div>
-            </div>
+                <canvas id="imageCanvas" class="border border-gray-200 rounded overflow-hidden" style="display:none;"></canvas>
+                <img id="uploadedImage" class="border border-gray-200 rounded overflow-hidden" src="" alt="Uploaded Preview" style="display:none;">
 
-            <!-- Sliders for Sensitivity and Smoothness -->
-            <div class="w-1/4 bg-white rounded-lg shadow-md p-4">
-                <h3 class="text-lg font-semibold mb-4">Adjustments</h3>
-                <label for="sensitivity" class="block text-gray-600 mb-2">Sensitivity</label>
-                <input type="range" id="sensitivity" min="0" max="100" class="w-full mb-4">
-                <label for="smoothness" class="block text-gray-600 mb-2">Smoothness</label>
-                <input type="range" id="smoothness" min="0" max="100" class="w-full">
+                <div class="mt-4 flex justify-center gap-4 items-center">
+                    <!-- Toggle Switch for AI Mode -->
+                    <div class="flex items-center">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="toggleAI" class="sr-only" checked>
+                            <div class="toggle-bg w-14 h-8 bg-gray-300 rounded-full flex items-center relative active">
+                                <div class="dot w-6 h-6 bg-white rounded-full shadow-md active"></div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Realize Button -->
+                    <button id="realizeButton" class="bg-green-500 text-white px-4 py-2 rounded flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm4.707-9.707a1 1 0 00-1.414-1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -58,8 +68,19 @@
             <div id="resultContainer" class="border border-gray-200 rounded overflow-hidden mb-4">
                 <img id="resultImage" class="w-full h-auto" src="" alt="Result Preview">
             </div>
-            <button id="downloadButton" class="bg-blue-500 text-white px-4 py-2 rounded">Download Image</button>
+            <button id="downloadButton" class="bg-blue-500 text-white px-4 py-2 rounded flex items-center mx-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a7 7 0 11-4.86 3.13l.47-.47a1 1 0 011.42 1.42l-1 1a1 1 0 01-1.42 0l-1-1a1 1 0 111.42-1.42l.47.47A7 7 0 0110 2zM9 13a1 1 0 112 0 1 1 0 01-2 0z" />
+                </svg>
+                
+            </button>
         </div>
+
+        <!-- Efeito de Loading -->
+        <div id="loading" class="hidden fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50">
+            <div class="loader border-t-4 border-blue-500 rounded-full w-16 h-16 animate-spin"></div>
+        </div>
+
     </main>
 
     <!-- Footer -->
@@ -71,7 +92,9 @@
 
     <!-- JavaScript -->
     <script src="script.js"></script>
+    <script>
+
+    </script>
 </body>
 
 </html>
-
