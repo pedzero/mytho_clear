@@ -57,7 +57,6 @@ def process_image_custom(base64_str, parameters):
     img = base64_to_image(base64_str)
     img_size = img.shape[1::-1]
     img_num_pixels = img_size[0] * img_size[1]
-    print('pixels:', img_num_pixels)
 
     canny_threshold1 = int(parameters.get('lowerThreshold', 50))
     canny_threshold2 = int(parameters.get('upperThreshold', 150))
