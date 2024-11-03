@@ -24,45 +24,44 @@ function toggleAdjustments() {
 }
 
 function processImage() {
-    const previewImage = document.getElementById('previewImage');
+    const fileInput = document.getElementById('fileInput');
     const resultImage = document.getElementById('resultImage');
-    const algorithm = !document.getElementById('algorithmSwitch').checked ? "custom" : "ai";
-
-    if (!previewImage.src) {
+    const algorithm = document.getElementById('algorithmSwitch').checked ? "ai" : "custom";
+    
+    if (!fileInput.files[0]) {
         alert("Please upload an image first.");
         return;
     }
+    
+    const formData = new FormData();
+    formData.append('algorithm', algorithm);
+    formData.append('image', fileInput.files[0]);
 
-    const parameters = {
-        lowerThreshold: document.getElementById('lowerThreshold').value,
-        upperThreshold: document.getElementById('upperThreshold').value,
-        kernelSize: document.getElementById('kernelSize').value,
-        edgeDilate: document.getElementById('edgeDilate').value,
-        minContour: document.getElementById('minContour').value,
-        erosion: document.getElementById('erosion').value,
-        blur: document.getElementById('blur').value
-    };
+    if (algorithm === "custom") {
+        formData.append('parameters', JSON.stringify({
+            lowerThreshold: document.getElementById('lowerThreshold').value,
+            upperThreshold: document.getElementById('upperThreshold').value,
+            kernelSize: document.getElementById('kernelSize').value,
+            edgeDilate: document.getElementById('edgeDilate').value,
+            minContour: document.getElementById('minContour').value,
+            erosion: document.getElementById('erosion').value,
+            blur: document.getElementById('blur').value
+        }));
+    }
 
     fetch('/process_image', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            algorithm: algorithm,
-            image: previewImage.src.split(',')[1],
-            parameters: parameters
-        })
+        body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.image) {
-            resultImage.src = 'data:image/png;base64,' + data.image;
-            resultImage.classList.remove('hidden');
-        } else {
-            alert("Error processing image.");
-        }
+    .then(response => response.blob())
+    .then(blob => {
+        const imageUrl = URL.createObjectURL(blob);
+        resultImage.src = imageUrl;
+        resultImage.classList.remove('hidden');
     })
     .catch(error => console.error('Error:', error));
 }
+
 
 function downloadImage() {
     const resultImage = document.getElementById('resultImage');
