@@ -1,77 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@^2.0/dist/tailwind.min.css" rel="stylesheet">
-    <title>MythoClear</title>
+    <title>MythoClear - Image Processing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
+<body class="bg-gray-900 text-white font-sans flex flex-col min-h-screen">
+    <!-- Header -->
+    <header class="p-4 bg-gray-800 text-center">
+        <h1 class="text-3xl font-bold text-cyan-400">MythoClear</h1>
+        <p class="text-gray-400">Custom Image Processing with Adjustable Parameters</p>
+    </header>
 
-<body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
-
-    <!-- Navbar -->
-    <nav class="bg-blue-600 text-white p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold">MythoClear</h1>
-        </div>
-    </nav>
-
-    <!-- Main Container -->
-    <main class="container mx-auto mt-8 p-4 flex-grow">
-        <!-- Image Upload Section -->
-        <div class="bg-white rounded-lg shadow-md p-6 text-center">
-            <h2 class="text-xl font-semibold mb-4">Upload an Image</h2>
-            <input type="file" id="imageInput" class="hidden" accept="image/*">
-            <div id="dropArea" class="block w-full p-4 border-dashed border-2 border-gray-300 rounded-md cursor-pointer text-gray-500 hover:bg-gray-50">
-                Drag & Drop an Image or Click to Upload
+    <!-- Main Content -->
+    <main class="flex flex-col items-center p-6 space-y-6">
+        <!-- Image Selection Block -->
+        <section id="image-upload" class="flex flex-col items-center w-4/5 p-4 bg-gray-700 rounded-lg mb-4">
+            <h2 class="text-xl font-semibold mb-4 text-cyan-400">Upload Image</h2>
+            <!-- Aumentar a altura da área de upload de imagem -->
+            <div class="w-full h-96 flex items-center justify-center bg-gray-600 rounded-lg cursor-pointer hover:bg-gray-500 transition-colors">
+                <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="previewImage(event)">
+                <label for="fileInput" id="imageContainer" class="text-gray-300 text-center w-full h-full flex justify-center items-center">
+                    <span id="placeholderText" class="block mb-2 text-gray-400">Drag & drop an image or click to select</span>
+                    <img id="previewImage" class="hidden w-auto h-full rounded-md" alt="Selected Image">
+                </label>
             </div>
-            
-        </div>
+        </section>
 
-        <!-- Image Editing Section -->
-        <div class="mt-8 flex gap-4">
-            <!-- Image Preview and Actions -->
-            <div class="flex-1 bg-white rounded-lg shadow-md p-4 text-center">
-                <h3 class="text-lg font-semibold mb-2">Image Preview</h3>
-                <canvas id="imageCanvas" class="border border-gray-200 rounded overflow-hidden w-full h-auto" style="display:none;"></canvas>
-                <img id="uploadedImage" class="w-full h-auto" src="" alt="Uploaded Preview" style="display:none;">
-                <div class="mt-4 flex justify-center gap-4">
-                    <button id="removeButton" class="bg-red-500 text-white px-4 py-2 rounded">Remove</button>
-                    <button id="keepButton" class="bg-green-500 text-white px-4 py-2 rounded">Keep</button>
+        <!-- Adjustments and Result Section -->
+        <div class="flex w-full justify-between space-x-4">
+            <!-- Adjustments Block -->
+            <aside class="w-1/3 p-4 bg-gray-700 rounded-lg flex flex-col">
+                <h2 class="text-xl font-semibold mb-4 text-cyan-400">Adjustments</h2>
+                <div class="flex items-center mb-4">
+                    <span class="text-gray-300 mr-2">Custom</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="algorithmSwitch" class="sr-only peer" unchecked onchange="toggleAdjustments()">
+                        <div class="w-11 h-6 bg-gray-600 rounded-full peer-checked:bg-cyan-400 peer-checked:before:translate-x-5 before:absolute before:top-0.5 before:left-0.5 before:bg-white before:rounded-full before:h-5 before:w-5 before:transition-transform"></div>
+                    </label>
+                    <span class="text-gray-300 ml-2">AI</span>
                 </div>
-            </div>
+                <div id="adjustments" class="space-y-4">
+                    <div>
+                        <label for="lowerThreshold" class="block text-gray-300">Lower Threshold <span id="lowerValue" class="text-cyan-400">25</span></label>
+                        <input type="range" id="lowerThreshold" min="0" max="255" value="25" class="w-full bg-gray-500" oninput="document.getElementById('lowerValue').innerText = this.value">
+                    </div>
+                    <div>
+                        <label for="upperThreshold" class="block text-gray-300">Upper Threshold <span id="upperValue" class="text-cyan-400">120</span></label>
+                        <input type="range" id="upperThreshold" min="0" max="255" value="120" class="w-full bg-gray-500" oninput="document.getElementById('upperValue').innerText = this.value">
+                    </div>
+                    <div>
+                        <label for="kernelSize" class="block text-gray-300">Kernel Size <span id="kernelValue" class="text-cyan-400">3</span></label>
+                        <input type="range" id="kernelSize" min="1" max="32" value="3" class="w-full bg-gray-500" oninput="document.getElementById('kernelValue').innerText = this.value">
+                    </div>
+                    <div>
+                        <label for="edgeDilate" class="block text-gray-300">Edge Dilate (Iterations) <span id="edgeValue" class="text-cyan-400">2</span></label>
+                        <input type="range" id="edgeDilate" min="0" max="16" value="2" class="w-full bg-gray-500" oninput="document.getElementById('edgeValue').innerText = this.value">
+                    </div>
+                    <div>
+                        <label for="minContour" class="block text-gray-300">Min Contour Area (%) <span id="contourValue" class="text-cyan-400">8</span></label>
+                        <input type="range" id="minContour" min="0" max="100" value="8" class="w-full bg-gray-500" oninput="document.getElementById('contourValue').innerText = this.value">
+                    </div>
+                    <div>
+                        <label for="erosion" class="block text-gray-300">Erosion (Iterations) <span id="erosionValue" class="text-cyan-400">12</span></label>
+                        <input type="range" id="erosion" min="0" max="32" value="12" class="w-full bg-gray-500" oninput="document.getElementById('erosionValue').innerText = this.value">
+                    </div>
+                    <div>
+                        <label for="blur" class="block text-gray-300">Blur <span id="blurValue" class="text-cyan-400">20</span></label>
+                        <input type="range" id="blur" min="0" max="100" value="20" class="w-full bg-gray-500" oninput="document.getElementById('blurValue').innerText = this.value">
+                    </div>
+                </div>
+                <button id="processButton" class="mt-4 py-2 bg-cyan-400 text-gray-900 rounded hover:bg-cyan-500" onclick="processImage()">Process Image</button>
+            </aside>
 
-            <!-- Sliders for Sensitivity and Smoothness -->
-            <div class="w-1/4 bg-white rounded-lg shadow-md p-4">
-                <h3 class="text-lg font-semibold mb-4">Adjustments</h3>
-                <label for="sensitivity" class="block text-gray-600 mb-2">Sensitivity</label>
-                <input type="range" id="sensitivity" min="0" max="100" class="w-full mb-4">
-                <label for="smoothness" class="block text-gray-600 mb-2">Smoothness</label>
-                <input type="range" id="smoothness" min="0" max="100" class="w-full">
-            </div>
-        </div>
-
-        <!-- Result Section -->
-        <div class="mt-8 bg-white rounded-lg shadow-md p-6 text-center">
-            <h2 class="text-xl font-semibold mb-4">Processed Image</h2>
-            <div id="resultContainer" class="border border-gray-200 rounded overflow-hidden mb-4">
-                <img id="resultImage" class="w-full h-auto" src="" alt="Result Preview">
-            </div>
-            <button id="downloadButton" class="bg-blue-500 text-white px-4 py-2 rounded">Download Image</button>
+            <!-- Result Block -->
+            <section class="flex flex-col items-center w-2/3 p-4 bg-gray-700 rounded-lg">
+                <h2 class="text-xl font-semibold mb-4 text-cyan-400">Result</h2>
+                <div class="w-full h-72 bg-gray-600 rounded-lg flex items-center justify-center mb-4">
+                    <img id="resultImage" src="" alt="Result Image" class="hidden w-auto h-full rounded-md">
+                </div>
+                <button id="downloadButton" class="mt-4 py-2 px-4 bg-cyan-400 text-gray-900 rounded hover:bg-cyan-500 flex items-center space-x-2" onclick="downloadImage()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
+                        <path d="M17 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V7l-4-4zm-5 16a3 3 0 110-6 3 3 0 010 6zm3-10H7V5h8v4z"/>
+                    </svg>
+                    <span>Save Image</span>
+                </button>
+            </section>
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white p-4 mt-8">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2024 MythoClear. All rights reserved.</p>
-        </div>
+    <footer class="p-4 bg-gray-800 text-center text-gray-400">
+        <p>&copy; 2024 MythoClear. All rights reserved.</p>
     </footer>
 
-    <!-- JavaScript -->
-    <script src="./static/script.js"></script>
+    <!-- Scripts -->
+    <script src="/static/script.js"></script>
 </body>
-
 </html>
-
